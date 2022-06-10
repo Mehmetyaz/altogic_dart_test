@@ -48,8 +48,57 @@ void main() {
       expect(signUpResult.user, isNull);
       expect(signUpResult.session, isNull);
     });
-
-
-
   });
+
+
+
+  group('sign_up_with_phone', () {
+    test('correct', () async {
+      await clearUser();
+      var signUpResult = await signUpWithPhoneCorrect();
+
+      expect(signUpResult.errors, isNull);
+      expect(signUpResult.user, isNotNull);
+      // Verification not required. So session returns not null.
+      expect(signUpResult.session, isNotNull);
+    });
+
+    test('incorrect_all', () async {
+      await clearUser();
+      var signUpResult = await signUpWithPhoneAllIncorrect();
+
+      expect(signUpResult.errors, isNotNull);
+      expect(signUpResult.errors!.items.length, 2);
+      expect(signUpResult.user, isNull);
+      expect(signUpResult.session, isNull);
+    });
+
+    test('incorrect_phone', () async {
+      await clearUser();
+      var signUpResult = await signUpWithPhoneIncorrectMail();
+
+      expect(signUpResult.errors, isNotNull);
+      expect(signUpResult.errors!.items.length, 1);
+      expect(signUpResult.user, isNull);
+      expect(signUpResult.session, isNull);
+    });
+
+    test('incorrect_pwd', () async {
+      await clearUser();
+      var signUpResult = await signUpWithPhoneIncorrectPass();
+
+      expect(signUpResult.errors, isNotNull);
+      expect(signUpResult.errors!.items.length, 1);
+      expect(signUpResult.user, isNull);
+      expect(signUpResult.session, isNull);
+    });
+  });
+  
+  
+  
+  
+  
+  
+  
+  
 }

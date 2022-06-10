@@ -21,13 +21,16 @@ Future<APIResponse<Map<String, dynamic>>> pingSession() async {
 
 const successPing = {'hello': 'world!'};
 
-const mail = 'mehmedyaz@gmail.com';
+const email = 'mehmedyaz@gmail.com';
+const phone = '+905530635063';
 const pwd = 'mehmetyaz';
 
-Future<APIResponse> clearUser() async {
-  return client.endpoint.post('/clear_user', body: {'email': mail}).asMap();
+Future<APIResponse> clearUser() {
+  return client.endpoint
+      .post('/clear_user', body: {'email': email, 'phone': phone}).asMap();
 }
 
-Future<APIResponse> validateMail() async {
-  return client.endpoint.post('/validate_mail', body: {'email': mail}).asMap();
+Future<APIResponse> validateMail() {
+  return client.endpoint
+      .post('/validate_mail', body: {'email': email, 'phone': phone}).asMap();
 }

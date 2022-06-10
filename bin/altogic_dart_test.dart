@@ -9,7 +9,7 @@ void main() async {
 
   createClientTest();
 
-  var res = await client.endpoint.post('/clear_user', body: {'email': mail}).asMap();
+  var res = await client.endpoint.post('/clear_user', body: {'email': email}).asMap();
 
 
   print(res.errors);
