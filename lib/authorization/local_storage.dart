@@ -9,11 +9,11 @@ Future<User?> getUserTest() {
   return client.auth.getUser();
 }
 
-void setUserTest(User user) {
+Future<void> setUserTest(User user) {
   return client.auth.setUser(user);
 }
 
-void setSessionTest(Session session) {
+Future<void> setSessionTest(Session session) {
   return client.auth.setSession(session);
 }
 

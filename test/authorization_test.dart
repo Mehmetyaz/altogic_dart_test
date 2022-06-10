@@ -159,4 +159,83 @@ void main() {
     expect(user, isNull);
     //--
   });
+
+  group('set-get user-session', () {
+    var storage = FakeStorage();
+    createClientWithFakeStorage(storage);
+
+    test('success', () async {
+      await clearUser();
+      await signUpWithEmailCorrect();
+      await validateMail();
+      await signInWithEmail();
+
+      // expect saved success
+      expect(storage.values['session'], isNotEmpty);
+      expect(storage.values['user'], isNotEmpty);
+
+      var session = await getSessionTest();
+      var user = await getUserTest();
+      expect(session, isNotNull);
+      expect(user, isNotNull);
+      //--
+
+      await clearLocalDataTest();
+
+      // set user-session
+      await setSessionTest(session!);
+      await setUserTest(user!);
+      // --
+
+      // expect get success
+      session = await getSessionTest();
+      user = await getUserTest();
+      expect(session, isNotNull);
+      expect(user, isNotNull);
+      // --
+    });
+
+    test('not stored', () async {
+      await clearLocalDataTest();
+      // expect get success
+      var session = await getSessionTest();
+      var user = await getUserTest();
+      expect(session, isNull);
+      expect(user, isNull);
+      // --
+    });
+
+    test('storage undefined', () async {
+      createClientTest();
+      await clearUser();
+      await signUpWithEmailCorrect();
+      await validateMail();
+      var result = await signInWithEmail();
+
+      expect(result.user, isNotNull);
+      expect(result.session, isNotNull);
+
+      var session = result.session;
+      var user = result.user;
+
+      // expect unsaved
+      var sessionGet = await getSessionTest();
+      var userGet = await getUserTest();
+      expect(sessionGet, isNull);
+      expect(userGet, isNull);
+      //--
+
+      // set user-session
+      await setSessionTest(session!);
+      await setUserTest(user!);
+      // --
+
+      // expect unsaved
+      sessionGet = await getSessionTest();
+      userGet = await getUserTest();
+      expect(sessionGet, isNull);
+      expect(userGet, isNull);
+      //--
+    });
+  });
 }
