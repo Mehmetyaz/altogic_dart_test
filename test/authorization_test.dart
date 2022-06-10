@@ -1,15 +1,14 @@
+import 'package:altogic_dart_test/authorization/sign_in.dart';
 import 'package:altogic_dart_test/authorization/sign_up.dart';
+import 'package:altogic_dart_test/authorization/local_storage.dart';
 import 'package:altogic_dart_test/client/create_client.dart';
 import 'package:altogic_dart_test/utils.dart';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 
 void main() {
-  setUp(() async {
-    createClientTest();
-  });
-
   group('sign_up_with_mail', () {
+    createClientTest();
     test('correct', () async {
       await clearUser();
       var signUpResult = await signUpWithEmailCorrect();
@@ -50,9 +49,8 @@ void main() {
     });
   });
 
-
-
   group('sign_up_with_phone', () {
+    createClientTest();
     test('correct', () async {
       await clearUser();
       var signUpResult = await signUpWithPhoneCorrect();
@@ -93,12 +91,38 @@ void main() {
       expect(signUpResult.session, isNull);
     });
   });
-  
-  
-  
-  
-  
-  
-  
-  
+
+  test('clear_local_data', () async {
+    var storage = FakeStorage();
+    createClientWithFakeStorage(storage);
+
+    await clearUser();
+    await signUpWithEmailCorrect();
+    await validateMail();
+    var result = await signInWithEmail();
+
+    expect(result.user, isNotNull);
+
+    // expect saved success
+    expect(storage.values['session'], isNotEmpty);
+    expect(storage.values['user'], isNotEmpty);
+
+    var session = await getSessionTest();
+    var user = await getUserTest();
+    expect(session, isNotNull);
+    expect(user, isNotNull);
+    //--
+
+    await clearLocalDataTest();
+
+    // expect clear success
+    expect(storage.values['session'], isNull);
+    expect(storage.values['user'], isNull);
+
+    session = await getSessionTest();
+    user = await getUserTest();
+    expect(session, isNull);
+    expect(user, isNull);
+    //--
+  });
 }

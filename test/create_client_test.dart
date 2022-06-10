@@ -1,7 +1,7 @@
 import 'package:altogic_dart/altogic_dart.dart';
 import 'package:altogic_dart_test/authorization/sign_in.dart';
 import 'package:altogic_dart_test/authorization/sign_up.dart';
-import 'package:altogic_dart_test/authorization/storage.dart';
+import 'package:altogic_dart_test/authorization/local_storage.dart';
 import 'package:altogic_dart_test/client/create_client.dart';
 import 'package:altogic_dart_test/utils.dart';
 import 'package:test/expect.dart';

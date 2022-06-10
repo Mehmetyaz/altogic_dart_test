@@ -1,5 +1,5 @@
 import 'package:altogic_dart/altogic_dart.dart';
-import 'package:altogic_dart_test/authorization/storage.dart';
+import 'package:altogic_dart_test/authorization/local_storage.dart';
 
 import '../utils.dart';
 
