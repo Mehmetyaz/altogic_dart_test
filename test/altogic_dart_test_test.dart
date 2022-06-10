@@ -9,5 +9,9 @@ void main() {
       expect(createClientTest, returnsNormally);
       expect(client.auth, isA<AuthManager>());
     });
+
+    test('incorrect', () {
+      expect(createClientTestIncorrectClient, throwsA(isA<ClientError>()));
+    });
   });
 }

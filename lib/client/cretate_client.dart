@@ -8,3 +8,7 @@ const clientKey = "abb823877b764da9a2a21c7318cd9d23";
 void createClientTest() {
   client = createClient(envUrl, clientKey);
 }
+
+void createClientTestIncorrectClient() {
+  client = createClient(envUrl.replaceFirst('https://', ''), clientKey);
+}
