@@ -1,5 +1,6 @@
 import 'package:altogic_dart/altogic_dart.dart';
-import 'package:altogic_dart_test/client/cretate_client.dart';
+import 'package:altogic_dart_test/authorization/sign_up.dart';
+import 'package:altogic_dart_test/client/create_client.dart';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 
@@ -26,6 +27,14 @@ void main() {
     test('incorrect-server-env-url', () async {
       expect(createClientTestIncorrectEnvUrl, returnsNormally);
       expect(ping, throwsException);
+    });
+
+    test('incorrect-server-client-key', () async {
+      expect(createClientTestIncorrectClientKey, returnsNormally);
+      var result = await signUpWithEmail();
+      expect(result.errors, isNotNull);
+      expect(result.errors!.status, 401);
+      expect(result.errors!.items.first.code, 'invalid_client_key');
     });
   });
 }
