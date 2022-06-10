@@ -18,5 +18,15 @@ void main() {
       expect(signUpResult.user, isNotNull);
       expect(signUpResult.session, isNull);
     });
+
+    test('incorrect_all', () async {
+      await clearUser();
+      var signUpResult = await signUpWithEmailAllIncorrect();
+
+      expect(signUpResult.errors, isNotNull);
+      expect(signUpResult.errors!.items.length, 2);
+      expect(signUpResult.user, isNull);
+      expect(signUpResult.session, isNull);
+    });
   });
 }
