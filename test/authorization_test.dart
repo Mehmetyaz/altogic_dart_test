@@ -38,5 +38,18 @@ void main() {
       expect(signUpResult.user, isNull);
       expect(signUpResult.session, isNull);
     });
+
+    test('incorrect_pwd', () async {
+      await clearUser();
+      var signUpResult = await signUpWithEmailIncorrectPass();
+
+      expect(signUpResult.errors, isNotNull);
+      expect(signUpResult.errors!.items.length, 1);
+      expect(signUpResult.user, isNull);
+      expect(signUpResult.session, isNull);
+    });
+
+
+
   });
 }
