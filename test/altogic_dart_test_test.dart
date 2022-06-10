@@ -56,8 +56,12 @@ void main() {
       expect(result.errors!.items.first.code, 'missing_API_key');
     });
 
-
-
-
+    test('api_key_required_incorrect_api_key', () async {
+      expect(createClientWithIncorrectApiKey, returnsNormally);
+      var result = await pingApiKey();
+      expect(result.errors, isNotNull);
+      expect(result.errors!.status, 401);
+      expect(result.errors!.items.first.code, 'invalid_API_key');
+    });
   });
 }
