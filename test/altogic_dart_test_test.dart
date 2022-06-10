@@ -47,5 +47,17 @@ void main() {
       expect(result.errors, isNull);
       expect(result.data, successPing);
     });
+
+    test('api_key_required_missing_api_key', () async {
+      expect(createClientTest, returnsNormally);
+      var result = await pingApiKey();
+      expect(result.errors, isNotNull);
+      expect(result.errors!.status, 401);
+      expect(result.errors!.items.first.code, 'missing_API_key');
+    });
+
+
+
+
   });
 }
