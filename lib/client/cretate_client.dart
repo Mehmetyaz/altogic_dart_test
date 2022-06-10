@@ -12,3 +12,11 @@ void createClientTest() {
 void createClientTestIncorrectClient() {
   client = createClient(envUrl.replaceFirst('https://', ''), clientKey);
 }
+
+void createClientTestIncorrectEnvUrl() {
+  client = createClient(envUrl.replaceFirst('altogic', 'a'), clientKey);
+}
+
+void createClientTestIncorrectClientKey() {
+  client = createClient(envUrl, clientKey.replaceFirst('823', ''));
+}
