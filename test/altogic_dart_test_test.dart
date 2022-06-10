@@ -8,6 +8,10 @@ Future<APIResponse<Map<String, dynamic>>> ping() async {
   return client.endpoint.get('/ping').asMap();
 }
 
+Future<APIResponse<Map<String, dynamic>>> pingApiKey() async {
+  return client.endpoint.get('/ping_api_key').asMap();
+}
+
 const successPing = {'hello': 'world!'};
 
 void main() {
@@ -35,6 +39,13 @@ void main() {
       expect(result.errors, isNotNull);
       expect(result.errors!.status, 401);
       expect(result.errors!.items.first.code, 'invalid_client_key');
+    });
+
+    test('api_key_required_success', () async {
+      expect(createClientWithApiKey, returnsNormally);
+      var result = await pingApiKey();
+      expect(result.errors, isNull);
+      expect(result.data, successPing);
     });
   });
 }
