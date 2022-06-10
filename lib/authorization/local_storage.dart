@@ -21,6 +21,12 @@ Future<void> clearLocalDataTest() async {
   return client.auth.clearLocalData();
 }
 
+Future<void> invalidateSessionTest() async {
+  return client.auth.invalidateSession();
+}
+
+
+
 class FakeStorage extends ClientStorage {
   final Map<String, String> values = {};
 

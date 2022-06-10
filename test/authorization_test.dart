@@ -125,4 +125,38 @@ void main() {
     expect(user, isNull);
     //--
   });
+
+  test('invalidate_session', () async {
+    var storage = FakeStorage();
+    createClientWithFakeStorage(storage);
+
+    await clearUser();
+    await signUpWithEmailCorrect();
+    await validateMail();
+    var result = await signInWithEmail();
+
+    expect(result.user, isNotNull);
+
+    // expect saved success
+    expect(storage.values['session'], isNotEmpty);
+    expect(storage.values['user'], isNotEmpty);
+
+    var session = await getSessionTest();
+    var user = await getUserTest();
+    expect(session, isNotNull);
+    expect(user, isNotNull);
+    //--
+
+    await invalidateSessionTest();
+
+    // expect clear success
+    expect(storage.values['session'], isNull);
+    expect(storage.values['user'], isNull);
+
+    session = await getSessionTest();
+    user = await getUserTest();
+    expect(session, isNull);
+    expect(user, isNull);
+    //--
+  });
 }
