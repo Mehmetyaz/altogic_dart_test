@@ -1,4 +1,5 @@
 import 'package:altogic_dart/altogic_dart.dart';
+import 'package:altogic_dart_test/authorization/sign_in.dart';
 import 'package:altogic_dart_test/authorization/sign_up.dart';
 import 'package:altogic_dart_test/authorization/storage.dart';
 import 'package:altogic_dart_test/client/create_client.dart';
@@ -27,7 +28,7 @@ void main() {
 
     test('incorrect-server-client-key', () async {
       expect(createClientTestIncorrectClientKey, returnsNormally);
-      var result = await signUpWithEmail();
+      var result = await signUpWithEmailCorrect();
       expect(result.errors, isNotNull);
       expect(result.errors!.status, 401);
       expect(result.errors!.items.first.code, 'invalid_client_key');
@@ -70,7 +71,7 @@ void main() {
 
     await clearUser();
 
-    await signUpWithEmail();
+    await signUpWithEmailCorrect();
 
     await validateMail();
 
