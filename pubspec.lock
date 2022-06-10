@@ -11,11 +11,9 @@ packages:
   altogic_dart:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: fbeaa2c900f006b26c1dee98af164150f9201192
-      url: "https://github.com/altogic/altogic-dart"
-    source: git
+      path: "../altogic-dart"
+      relative: true
+    source: path
     version: "0.0.2"
   analyzer:
     dependency: transitive

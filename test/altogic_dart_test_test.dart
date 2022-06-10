@@ -1,18 +1,10 @@
 import 'package:altogic_dart/altogic_dart.dart';
 import 'package:altogic_dart_test/authorization/sign_up.dart';
+import 'package:altogic_dart_test/authorization/storage.dart';
 import 'package:altogic_dart_test/client/create_client.dart';
+import 'package:altogic_dart_test/utils.dart';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
-
-Future<APIResponse<Map<String, dynamic>>> ping() async {
-  return client.endpoint.get('/ping').asMap();
-}
-
-Future<APIResponse<Map<String, dynamic>>> pingApiKey() async {
-  return client.endpoint.get('/ping_api_key').asMap();
-}
-
-const successPing = {'hello': 'world!'};
 
 void main() {
   group('createClient', () {
@@ -63,5 +55,40 @@ void main() {
       expect(result.errors!.status, 401);
       expect(result.errors!.items.first.code, 'invalid_API_key');
     });
+  });
+
+  test('restoreLocalAuthSession', () async {
+    // Flow : clear user, create user , sign in , change `client` instance with
+    // same localStorage instance. restore user, call an endpoint that need
+    // session.
+
+    var storage = FakeStorage();
+
+    expect(() {
+      createClientWithFakeStorage(storage);
+    }, returnsNormally);
+
+    await clearUser();
+
+    await signUpWithEmail();
+
+    await validateMail();
+
+    var signInResult = await signInWithEmail();
+
+    expect(signInResult.session, isNotNull);
+
+    expect(() {
+      createClientWithFakeStorage(storage);
+    }, returnsNormally);
+
+    await client.restoreLocalAuthSession();
+
+    var newSession = await client.auth.getSession();
+
+    expect(newSession, isNotNull);
+
+    expect(newSession!.token, signInResult.session!.token);
+    expect(newSession.userId, signInResult.session!.userId);
   });
 }

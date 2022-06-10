@@ -9,8 +9,7 @@ environment:
 
 dependencies:
   altogic_dart:
-    git: https://github.com/altogic/altogic-dart
-#   path: ^1.8.0
+    path: ../altogic-dart
 
 dev_dependencies:
   lints: ^2.0.0
