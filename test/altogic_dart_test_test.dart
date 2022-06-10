@@ -1,8 +1,13 @@
-import 'package:altogic_dart_test/main.dart';
-import 'package:test/test.dart';
+import 'package:altogic_dart/altogic_dart.dart';
+import 'package:altogic_dart_test/client/cretate_client.dart';
+import 'package:test/expect.dart';
+import 'package:test/scaffolding.dart';
 
 void main() {
-  test('calculate', () {
-    expect(calculate(), 42);
+  group('createClient', () {
+    test('correct', () {
+      expect(createClientTest, returnsNormally);
+      expect(client.auth, isA<AuthManager>());
+    });
   });
 }

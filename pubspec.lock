@@ -13,7 +13,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: fc15db69c92ed245592c13379b785a7fb9adbae9
+      resolved-ref: fbeaa2c900f006b26c1dee98af164150f9201192
       url: "https://github.com/altogic/altogic-dart"
     source: git
     version: "0.0.2"
