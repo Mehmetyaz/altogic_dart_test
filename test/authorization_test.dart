@@ -161,7 +161,6 @@ void main() {
   });
 
   group('set-get user-session', () {
-
     test('success', () async {
       // Flow : signIn - expect saved - clear - set user|session - expect saved
       var storage = FakeStorage();
@@ -246,12 +245,26 @@ void main() {
   });
 
   group('sign_in_with_email', () {
-    createClientTest();
-
     test('correct', () async {
+      createClientTest();
       await setUpMailUser(false);
 
       var result = await signInWithEmailCorrect();
+      expect(result.user, isNotNull);
+      expect(result.session, isNotNull);
+      expect(result.errors, isNull);
+    });
+
+    test('already_signed', () async {
+      createClientTest();
+      await setUpMailUser(false);
+
+      var result = await signInWithEmailCorrect();
+      expect(result.user, isNotNull);
+      expect(result.session, isNotNull);
+      expect(result.errors, isNull);
+
+      result = await signInWithEmailCorrect();
       expect(result.user, isNotNull);
       expect(result.session, isNotNull);
       expect(result.errors, isNull);
