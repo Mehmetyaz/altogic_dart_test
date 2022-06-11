@@ -279,5 +279,17 @@ void main() {
       expect(result.session, isNull);
       expect(result.user, isNull);
     });
+
+    test('incorrect_pwd', () async {
+      createClientTest();
+      var result = await signInWithEmailWrongPwd();
+
+      print(result.errors);
+      expect(result.errors, isNotNull);
+      expect(result.session, isNull);
+      expect(result.user, isNull);
+    });
+
+
   });
 }
