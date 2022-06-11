@@ -37,9 +37,17 @@ Future<APIResponse> validateMail() {
       .post('/validate_mail', body: {'email': email, 'phone': phone}).asMap();
 }
 
-Future<void> setUpMailUser([bool signIn = true]) async {
+Future<void> setUpEmailUser([bool signIn = true]) async {
   await clearUser();
   await signUpWithEmailCorrect();
   await validateMail();
   if (signIn) await signInWithEmailCorrect();
+}
+
+
+Future<void> setUpPhoneUser([bool signIn = true]) async {
+  await clearUser();
+  await signUpWithPhoneCorrect();
+  await validateMail();
+  if (signIn) await signInWithPhoneCorrect();
 }

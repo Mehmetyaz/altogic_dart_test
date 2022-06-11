@@ -14,7 +14,7 @@ void main() async {
 
   createClientWithFakeStorage(storage);
 
-  await setUpMailUser(false);
+  await setUpEmailUser(false);
 
   var result = await signInWithEmailCorrect();
 

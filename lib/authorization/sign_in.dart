@@ -13,3 +13,19 @@ Future<UserSessionResult> signInWithEmailWrongMail() {
 Future<UserSessionResult> signInWithEmailWrongPwd() {
   return client.auth.signInWithEmail(email, pwd.replaceFirst('y', 't'));
 }
+
+
+
+Future<UserSessionResult> signInWithPhoneCorrect() {
+  return client.auth.signInWithPhone(phone, pwd);
+}
+
+Future<UserSessionResult> signInWithPhoneWrongPhone() {
+  return client.auth.signInWithPhone(phone.replaceFirst('55', '0'), pwd);
+}
+
+Future<UserSessionResult> signInWithPhoneWrongPwd() {
+  return client.auth.signInWithPhone(phone, pwd.replaceFirst('y', 't'));
+}
+
+

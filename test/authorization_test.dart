@@ -199,7 +199,7 @@ void main() {
       var storage = FakeStorage();
       createClientWithFakeStorage(storage);
 
-      await setUpMailUser();
+      await setUpEmailUser();
 
       await clearLocalDataTest();
       // expect get success
@@ -247,7 +247,7 @@ void main() {
   group('sign_in_with_email', () {
     test('correct', () async {
       createClientTest();
-      await setUpMailUser(false);
+      await setUpEmailUser(false);
 
       var result = await signInWithEmailCorrect();
       expect(result.user, isNotNull);
@@ -257,7 +257,7 @@ void main() {
 
     test('already_signed', () async {
       createClientTest();
-      await setUpMailUser(false);
+      await setUpEmailUser(false);
 
       var result = await signInWithEmailCorrect();
       expect(result.user, isNotNull);
@@ -289,7 +289,56 @@ void main() {
       expect(result.session, isNull);
       expect(result.user, isNull);
     });
-
-
   });
+
+
+
+  group('sign_in_with_phone', () {
+    test('correct', () async {
+      createClientTest();
+      await setUpPhoneUser(false);
+
+      var result = await signInWithPhoneCorrect();
+      expect(result.user, isNotNull);
+      expect(result.session, isNotNull);
+      expect(result.errors, isNull);
+    });
+
+    test('already_signed', () async {
+      createClientTest();
+      await setUpPhoneUser(false);
+
+      var result = await signInWithPhoneCorrect();
+      expect(result.user, isNotNull);
+      expect(result.session, isNotNull);
+      expect(result.errors, isNull);
+
+      result = await signInWithPhoneCorrect();
+      expect(result.user, isNotNull);
+      expect(result.session, isNotNull);
+      expect(result.errors, isNull);
+    });
+
+    test('incorrect_phone', () async {
+      createClientTest();
+      var result = await signInWithPhoneWrongPhone();
+
+      print(result.errors);
+      expect(result.errors, isNotNull);
+      expect(result.session, isNull);
+      expect(result.user, isNull);
+    });
+
+    test('incorrect_pwd', () async {
+      createClientTest();
+      var result = await signInWithPhoneWrongPwd();
+
+      print(result.errors);
+      expect(result.errors, isNotNull);
+      expect(result.session, isNull);
+      expect(result.user, isNull);
+    });
+  });
+  
+  
 }
