@@ -1,20 +1,30 @@
 
 
 
+import 'package:altogic_dart_test/authorization/local_storage.dart';
+import 'package:altogic_dart_test/authorization/sign_in.dart';
 import 'package:altogic_dart_test/client/create_client.dart';
 import 'package:altogic_dart_test/utils.dart';
 
 void main() async {
 
 
-  createClientTest();
 
-  var res = await client.endpoint.post('/clear_user', body: {'email': email}).asMap();
+  var storage = FakeStorage();
+
+  createClientWithFakeStorage(storage);
+
+  await setUpMailUser(false);
+
+  var result = await signInWithEmailCorrect();
 
 
-  print(res.errors);
-  print(res.data);
+  print(result.errors);
+  print(result.session);
+  print(result.user);
 
+
+  print(storage.values);
 
 
 }

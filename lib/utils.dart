@@ -1,4 +1,6 @@
 import 'package:altogic_dart/altogic_dart.dart';
+import 'package:altogic_dart_test/authorization/sign_in.dart';
+import 'package:altogic_dart_test/authorization/sign_up.dart';
 
 late AltogicClient client;
 
@@ -27,10 +29,17 @@ const pwd = 'mehmetyaz';
 
 Future<APIResponse> clearUser() {
   return client.endpoint
-      .post('/clear_user', body: {'email': email, 'phone': phone}).asMap();
+      .delete('/clear_user', body: {'email': email, 'phone': phone}).asMap();
 }
 
 Future<APIResponse> validateMail() {
   return client.endpoint
       .post('/validate_mail', body: {'email': email, 'phone': phone}).asMap();
+}
+
+Future<void> setUpMailUser([bool signIn = true]) async {
+  await clearUser();
+  await signUpWithEmailCorrect();
+  await validateMail();
+  if (signIn) await signInWithEmailCorrect();
 }

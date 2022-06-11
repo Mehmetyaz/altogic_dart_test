@@ -99,7 +99,7 @@ void main() {
     await clearUser();
     await signUpWithEmailCorrect();
     await validateMail();
-    var result = await signInWithEmail();
+    var result = await signInWithEmailCorrect();
 
     expect(result.user, isNotNull);
 
@@ -133,7 +133,7 @@ void main() {
     await clearUser();
     await signUpWithEmailCorrect();
     await validateMail();
-    var result = await signInWithEmail();
+    var result = await signInWithEmailCorrect();
 
     expect(result.user, isNotNull);
 
@@ -161,18 +161,19 @@ void main() {
   });
 
   group('set-get user-session', () {
-    var storage = FakeStorage();
-    createClientWithFakeStorage(storage);
 
     test('success', () async {
+      // Flow : signIn - expect saved - clear - set user|session - expect saved
+      var storage = FakeStorage();
+      createClientWithFakeStorage(storage);
       await clearUser();
       await signUpWithEmailCorrect();
       await validateMail();
-      await signInWithEmail();
+      await signInWithEmailCorrect();
 
       // expect saved success
-      expect(storage.values['session'], isNotEmpty);
-      expect(storage.values['user'], isNotEmpty);
+      expect(storage.values['session'], isNotNull);
+      expect(storage.values['user'], isNotNull);
 
       var session = await getSessionTest();
       var user = await getUserTest();
@@ -196,6 +197,11 @@ void main() {
     });
 
     test('not stored', () async {
+      var storage = FakeStorage();
+      createClientWithFakeStorage(storage);
+
+      await setUpMailUser();
+
       await clearLocalDataTest();
       // expect get success
       var session = await getSessionTest();
@@ -210,7 +216,7 @@ void main() {
       await clearUser();
       await signUpWithEmailCorrect();
       await validateMail();
-      var result = await signInWithEmail();
+      var result = await signInWithEmailCorrect();
 
       expect(result.user, isNotNull);
       expect(result.session, isNotNull);
@@ -236,6 +242,19 @@ void main() {
       expect(sessionGet, isNull);
       expect(userGet, isNull);
       //--
+    });
+  });
+
+  group('sign_in_with_email', () {
+    createClientTest();
+
+    test('correct', () async {
+      await setUpMailUser(false);
+
+      var result = await signInWithEmailCorrect();
+      expect(result.user, isNotNull);
+      expect(result.session, isNotNull);
+      expect(result.errors, isNull);
     });
   });
 }

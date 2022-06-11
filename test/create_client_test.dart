@@ -75,7 +75,7 @@ void main() {
 
     await validateMail();
 
-    var signInResult = await signInWithEmail();
+    var signInResult = await signInWithEmailCorrect();
 
     expect(signInResult.session, isNotNull);
 
