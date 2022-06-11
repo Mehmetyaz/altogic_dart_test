@@ -269,5 +269,15 @@ void main() {
       expect(result.session, isNotNull);
       expect(result.errors, isNull);
     });
+
+    test('incorrect_mail', () async {
+      createClientTest();
+      var result = await signInWithEmailWrongMail();
+
+      print(result.errors);
+      expect(result.errors, isNotNull);
+      expect(result.session, isNull);
+      expect(result.user, isNull);
+    });
   });
 }
