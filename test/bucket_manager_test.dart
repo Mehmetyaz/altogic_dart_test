@@ -130,4 +130,27 @@ void main() {
 
     expect(result, isNotNull);
   });
+
+  test('make_public', () async {
+    await removeTestBucket();
+    await createBucketTest(isPublic: false);
+
+    var existsRes = await bucketExists();
+
+    expect(existsRes.errors, isNull);
+    expect(existsRes.data, isNotNull);
+
+    var result = await testBucket().makePublic();
+
+    print(result.data);
+
+    expect(result.data, isNotNull);
+    expect(result.errors, isNull);
+
+    var info = await getBucketInfo();
+
+    expect(info.errors, isNull);
+    expect(info.data, isNotNull);
+    expect(info.data!['isPublic'], true);
+  });
 }
