@@ -3,8 +3,12 @@ import 'package:altogic_dart_test/utils.dart';
 
 const String testBucketName = 'test_bucket';
 
+BucketManager testBucket() {
+  return client.storage.bucket(testBucketName);
+}
+
 Future<APIError?> removeTestBucket() async {
-  return client.storage.bucket(testBucketName).delete();
+  return testBucket().delete();
 }
 
 Future<APIResponse<Map<String, dynamic>>> createBucketTest(
@@ -14,9 +18,13 @@ Future<APIResponse<Map<String, dynamic>>> createBucketTest(
 }
 
 Future<APIResponse<bool>> bucketExists() async {
-  return client.storage.bucket(testBucketName).exists();
+  return testBucket().exists();
 }
 
 Future<APIResponse<Map<String, dynamic>>> getBucketInfo() async {
-  return client.storage.bucket(testBucketName).getInfo();
+  return testBucket().getInfo();
+}
+
+Future<APIError?> empty() {
+  return testBucket().empty();
 }
