@@ -112,4 +112,22 @@ void main() {
 
     await client.storage.bucket('new_test_bucket').delete();
   });
+
+  test('delete', () async {
+    await removeTestBucket();
+    await createBucketTest();
+
+    var existsRes = await bucketExists();
+
+    expect(existsRes.errors, isNull);
+    expect(existsRes.data, isNotNull);
+
+    var result = await removeTestBucket();
+
+    expect(result, isNull);
+
+    result = await removeTestBucket();
+
+    expect(result, isNotNull);
+  });
 }
