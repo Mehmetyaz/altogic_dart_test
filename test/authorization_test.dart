@@ -1,3 +1,4 @@
+import 'package:altogic_dart/altogic_dart.dart';
 import 'package:altogic_dart_test/authorization/sign_in.dart';
 import 'package:altogic_dart_test/authorization/sign_out.dart';
 import 'package:altogic_dart_test/authorization/sign_up.dart';
@@ -363,5 +364,30 @@ void main() {
       expect(ping.errors, isNotNull);
       expect(ping.errors?.status, 401);
     });
+  });
+
+  test('sign_out_all', () async {
+    createClientTest();
+    var client1 = client;
+    var client2 = createClient(envUrl, clientKey);
+
+    await setUpEmailUser(true, client1);
+    await signInWithEmailCorrect(client2);
+
+    var ping1Ftr = pingSession(client1);
+    var ping2Ftr = pingSession(client2);
+
+    var pings = await Future.wait([ping1Ftr, ping2Ftr]);
+
+    expect(pings.where((element) => element.errors != null), isEmpty);
+
+    await client1.auth.signOutAll();
+
+    ping1Ftr = pingSession(client1);
+    ping2Ftr = pingSession(client2);
+
+    pings = await Future.wait([ping1Ftr, ping2Ftr]);
+
+    expect(pings.where((element) => element.errors != null).length, 2);
   });
 }

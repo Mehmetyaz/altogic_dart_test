@@ -2,8 +2,8 @@ import 'package:altogic_dart/altogic_dart.dart';
 
 import '../utils.dart';
 
-Future<UserSessionResult> signInWithEmailCorrect() {
-  return client.auth.signInWithEmail(email, pwd);
+Future<UserSessionResult> signInWithEmailCorrect([AltogicClient? clientInstance]) {
+  return (clientInstance ?? client).auth.signInWithEmail(email, pwd);
 }
 
 Future<UserSessionResult> signInWithEmailWrongMail() {
@@ -16,8 +16,8 @@ Future<UserSessionResult> signInWithEmailWrongPwd() {
 
 
 
-Future<UserSessionResult> signInWithPhoneCorrect() {
-  return client.auth.signInWithPhone(phone, pwd);
+Future<UserSessionResult> signInWithPhoneCorrect([AltogicClient? clientInstance]) {
+  return (clientInstance ?? client).auth.signInWithPhone(phone, pwd);
 }
 
 Future<UserSessionResult> signInWithPhoneWrongPhone() {

@@ -9,16 +9,16 @@ const clientKey = "abb823877b764da9a2a21c7318cd9d23";
 const apiKey =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbnZJZCI6IjYyYTMwNDkxZjNhOWVmY2M1ZWI3MTE5MyIsImtleUlkIjoiNjJhMzA0OTJmM2E5ZWZjYzVlYjcxMTk5IiwiaWF0IjoxNjU0ODUwNzA2LCJleHAiOjI1MTg4NTA3MDZ9.vUtaI_ZjsqOLKBIbsxCijWNXrJxkuZhFjTIlFv8TMLo';
 
-Future<APIResponse<Map<String, dynamic>>> ping() async {
-  return client.endpoint.get('/ping').asMap();
+Future<APIResponse<Map<String, dynamic>>> ping([AltogicClient? clientInstance]) async {
+  return (clientInstance ?? client).endpoint.get('/ping').asMap();
 }
 
-Future<APIResponse<Map<String, dynamic>>> pingApiKey() async {
-  return client.endpoint.get('/ping_api_key').asMap();
+Future<APIResponse<Map<String, dynamic>>> pingApiKey([AltogicClient? clientInstance]) async {
+  return (clientInstance ?? client).endpoint.get('/ping_api_key').asMap();
 }
 
-Future<APIResponse<Map<String, dynamic>>> pingSession() async {
-  return client.endpoint.get('/ping_session').asMap();
+Future<APIResponse<Map<String, dynamic>>> pingSession([AltogicClient? clientInstance]) async {
+  return (clientInstance ?? client).endpoint.get('/ping_session').asMap();
 }
 
 const successPing = {'hello': 'world!'};
@@ -27,27 +27,29 @@ const email = 'mehmedyaz@gmail.com';
 const phone = '+905530635063';
 const pwd = 'mehmetyaz';
 
-Future<APIResponse> clearUser() {
-  return client.endpoint
+Future<APIResponse> clearUser([AltogicClient? clientInstance]) {
+  return (clientInstance ?? client)
+      .endpoint
       .delete('/clear_user', body: {'email': email, 'phone': phone}).asMap();
 }
 
-Future<APIResponse> validateMail() {
-  return client.endpoint
+Future<APIResponse> validateMail([AltogicClient? clientInstance]) {
+  return (clientInstance ?? client).endpoint
       .post('/validate_mail', body: {'email': email, 'phone': phone}).asMap();
 }
 
-Future<void> setUpEmailUser([bool signIn = true]) async {
-  await clearUser();
-  await signUpWithEmailCorrect();
-  await validateMail();
-  if (signIn) await signInWithEmailCorrect();
+Future<void> setUpEmailUser(
+    [bool signIn = true, AltogicClient? clientInstance]) async {
+  await clearUser(clientInstance);
+  await signUpWithEmailCorrect(clientInstance);
+  await validateMail(clientInstance);
+  if (signIn) await signInWithEmailCorrect(clientInstance);
 }
 
-
-Future<void> setUpPhoneUser([bool signIn = true]) async {
-  await clearUser();
-  await signUpWithPhoneCorrect();
-  await validateMail();
-  if (signIn) await signInWithPhoneCorrect();
+Future<void> setUpPhoneUser(
+    [bool signIn = true, AltogicClient? clientInstance]) async {
+  await clearUser(clientInstance);
+  await signUpWithPhoneCorrect(clientInstance);
+  await validateMail(clientInstance);
+  if (signIn) await signInWithPhoneCorrect(clientInstance);
 }
