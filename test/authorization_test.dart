@@ -390,4 +390,31 @@ void main() {
 
     expect(pings.where((element) => element.errors != null).length, 2);
   });
+
+  test('sign_out_all_except_current', () async {
+    createClientTest();
+    var client1 = client;
+    var client2 = createClient(envUrl, clientKey);
+
+    await setUpEmailUser(true, client1);
+    await signInWithEmailCorrect(client2);
+
+    var ping1Ftr = pingSession(client1);
+    var ping2Ftr = pingSession(client2);
+
+    var pings = await Future.wait([ping1Ftr, ping2Ftr]);
+
+    expect(pings.where((element) => element.errors != null), isEmpty);
+
+    await client1.auth.signOutAllExceptCurrent();
+
+    ping1Ftr = pingSession(client1);
+    ping2Ftr = pingSession(client2);
+
+    pings = await Future.wait([ping1Ftr, ping2Ftr]);
+
+    expect(pings.where((element) => element.errors != null).length, 1);
+    expect(pings[0].errors, isNull);
+    expect(pings[1].errors, isNotNull);
+  });
 }
