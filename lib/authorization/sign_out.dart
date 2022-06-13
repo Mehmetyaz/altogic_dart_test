@@ -5,15 +5,10 @@ Future<APIError?> signOutTest() {
   return client.auth.signOut();
 }
 
-
 Future<APIError?> signOutAllTest() {
   return client.auth.signOutAll();
 }
 
-
 Future<APIError?> signOutAllExceptCurrentTest() {
   return client.auth.signOutAllExceptCurrent();
 }
-
-
-

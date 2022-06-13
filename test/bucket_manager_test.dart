@@ -6,47 +6,45 @@ import 'package:altogic_dart_test/utils.dart';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 
+import 'utils.dart';
+
 void main() {
   setUp(() async {
     createClientTest();
     await setUpEmailUser();
   });
 
-  test(skip: true, 'exists', () async {
+  test('exists', () async {
     await removeTestBucket();
     var exists = await bucketExists();
 
-    expect(exists.errors, isNull);
+    expect(exists, successResponse);
     expect(exists.data, false);
 
     var createResult = await createBucketTest();
 
-    expect(createResult.errors, isNull);
-    expect(createResult.data, isNotNull);
+    expect(createResult, successResponse);
 
     exists = await bucketExists();
 
-    expect(exists.errors, isNull);
+    expect(exists, successResponse);
     expect(exists.data, true);
   });
 
-  test(skip: true, 'get_info', () async {
+  test('get_info', () async {
     await removeTestBucket();
     var bucketInfo = await getBucketInfo();
 
-    expect(bucketInfo.errors, isNotNull);
-    expect(bucketInfo.data, isNull);
+    expect(bucketInfo, errorResponse);
 
     var createResult =
         await createBucketTest(isPublic: true, tags: ['test_tag1']);
 
-    expect(createResult.errors, isNull);
-    expect(createResult.data, isNotNull);
+    expect(createResult, successResponse);
 
     bucketInfo = await getBucketInfo();
 
-    expect(bucketInfo.errors, isNull);
-    expect(bucketInfo.data, isNotNull);
+    expect(bucketInfo, successResponse);
 
     var data = bucketInfo.data!;
 
@@ -60,17 +58,15 @@ void main() {
     var createResult =
         await createBucketTest(isPublic: true, tags: ['test_tag1']);
 
-    expect(createResult.errors, isNull);
-    expect(createResult.data, isNotNull);
+    expect(createResult, successResponse);
 
     var uploaded = await uploadTestFile();
 
-    expect(uploaded.errors, isNull);
-    expect(uploaded.data, isNotNull);
+    expect(uploaded, successResponse);
 
     var fileExists = await getTestFileExists();
 
-    expect(fileExists.errors, isNull);
+    expect(fileExists, successResponse);
     expect(fileExists.data, true);
 
     var emptyResult = await empty();
@@ -79,7 +75,7 @@ void main() {
 
     fileExists = await getTestFileExists();
 
-    expect(fileExists.errors, isNull);
+    expect(fileExists, successResponse);
     expect(fileExists.data, false);
   });
 
@@ -95,19 +91,17 @@ void main() {
     var result =
         await client.storage.bucket(testBucketName).rename('new_test_bucket');
 
-    expect(result.errors, isNotNull);
-    expect(result.data, isNull);
+    expect(result, errorResponse);
 
     await createBucketTest();
 
     result =
         await client.storage.bucket(testBucketName).rename('new_test_bucket');
 
-    expect(result.errors, isNull);
-    expect(result.data, isNotNull);
+    expect(result, successResponse);
     var bucketExists = await client.storage.bucket('new_test_bucket').exists();
 
-    expect(bucketExists.errors, isNull);
+    expect(bucketExists, successResponse);
     expect(bucketExists.data, true);
 
     await client.storage.bucket('new_test_bucket').delete();
@@ -119,8 +113,7 @@ void main() {
 
     var existsRes = await bucketExists();
 
-    expect(existsRes.errors, isNull);
-    expect(existsRes.data, isNotNull);
+    expect(existsRes, successResponse);
 
     var result = await removeTestBucket();
 
@@ -138,18 +131,15 @@ void main() {
 
       var existsRes = await bucketExists();
 
-      expect(existsRes.errors, isNull);
-      expect(existsRes.data, isNotNull);
+      expect(existsRes, successResponse);
 
       var result = await testBucket().makePublic();
 
-      expect(result.data, isNotNull);
-      expect(result.errors, isNull);
+      expect(result, successResponse);
 
       var info = await getBucketInfo();
 
-      expect(info.errors, isNull);
-      expect(info.data, isNotNull);
+      expect(info, successResponse);
       expect(info.data!['isPublic'], true);
     });
 
@@ -158,14 +148,12 @@ void main() {
 
       var existsRes = await bucketExists();
 
-      expect(existsRes.errors, isNull);
-      expect(existsRes.data, isNotNull);
+      expect(existsRes, successResponse);
       expect(existsRes.data, false);
 
       var result = await testBucket().makePublic();
 
-      expect(result.data, isNull);
-      expect(result.errors, isNotNull);
+      expect(result, errorResponse);
     });
 
     test('already_public', () async {
@@ -174,8 +162,7 @@ void main() {
 
       var result = await testBucket().makePublic();
 
-      expect(result.data, isNotNull);
-      expect(result.errors, isNull);
+      expect(result, successResponse);
     });
   });
 
@@ -186,18 +173,15 @@ void main() {
 
       var existsRes = await bucketExists();
 
-      expect(existsRes.errors, isNull);
-      expect(existsRes.data, isNotNull);
+      expect(existsRes, successResponse);
 
       var result = await testBucket().makePrivate();
 
-      expect(result.data, isNotNull);
-      expect(result.errors, isNull);
+      expect(result, successResponse);
 
       var info = await getBucketInfo();
 
-      expect(info.errors, isNull);
-      expect(info.data, isNotNull);
+      expect(info, successResponse);
       expect(info.data!['isPublic'], false);
     });
 
@@ -206,14 +190,12 @@ void main() {
 
       var existsRes = await bucketExists();
 
-      expect(existsRes.errors, isNull);
-      expect(existsRes.data, isNotNull);
+      expect(existsRes, successResponse);
       expect(existsRes.data, false);
 
       var result = await testBucket().makePrivate();
 
-      expect(result.data, isNull);
-      expect(result.errors, isNotNull);
+      expect(result, errorResponse);
     });
 
     test('already_private', () async {
@@ -222,8 +204,7 @@ void main() {
 
       var result = await testBucket().makePrivate();
 
-      expect(result.data, isNotNull);
-      expect(result.errors, isNull);
+      expect(result, successResponse);
     });
   });
 
@@ -243,8 +224,7 @@ void main() {
 
       var result = await listFiles();
 
-      expect(result.errors, isNull);
-      expect(result.data, isNotNull);
+      expect(result, successResponse);
       expect(result.data, isA<List>());
 
       var data = result.data as List;
@@ -273,8 +253,7 @@ void main() {
 
       var result = await listFiles();
 
-      expect(result.errors, isNull);
-      expect(result.data, isNotNull);
+      expect(result, successResponse);
       expect(result.data, isA<List>());
 
       var data = result.data as List;
@@ -287,14 +266,21 @@ void main() {
 
       var existsRes = await bucketExists();
 
-      expect(existsRes.errors, isNull);
-      expect(existsRes.data, isNotNull);
+      expect(existsRes, successResponse);
       expect(existsRes.data, false);
 
       var result = await testBucket().listFiles();
 
-      expect(result.data, isNull);
-      expect(result.errors, isNotNull);
+      expect(result, errorResponse);
+    });
+  });
+
+  group('upload', () {
+    test('short_file', () async {
+      await removeTestBucket();
+      await createBucketTest();
+      var result = await uploadTestFile();
+      expect(result, successResponse);
     });
   });
 }

@@ -8,6 +8,8 @@ import 'package:altogic_dart_test/utils.dart';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 
+import 'utils.dart';
+
 void main() {
   group('sign_up_with_mail', () {
     createClientTest();
@@ -15,7 +17,7 @@ void main() {
       await clearUser();
       var signUpResult = await signUpWithEmailCorrect();
 
-      expect(signUpResult.errors, isNull);
+      expect(signUpResult.errors, successResponse);
       expect(signUpResult.user, isNotNull);
       expect(signUpResult.session, isNull);
     });
@@ -24,7 +26,7 @@ void main() {
       await clearUser();
       var signUpResult = await signUpWithEmailAllIncorrect();
 
-      expect(signUpResult.errors, isNotNull);
+      expect(signUpResult.errors, errorResponse);
       expect(signUpResult.errors!.items.length, 2);
       expect(signUpResult.user, isNull);
       expect(signUpResult.session, isNull);
@@ -34,7 +36,7 @@ void main() {
       await clearUser();
       var signUpResult = await signUpWithEmailIncorrectMail();
 
-      expect(signUpResult.errors, isNotNull);
+      expect(signUpResult.errors, errorResponse);
       expect(signUpResult.errors!.items.length, 1);
       expect(signUpResult.user, isNull);
       expect(signUpResult.session, isNull);
@@ -44,7 +46,7 @@ void main() {
       await clearUser();
       var signUpResult = await signUpWithEmailIncorrectPass();
 
-      expect(signUpResult.errors, isNotNull);
+      expect(signUpResult.errors, errorResponse);
       expect(signUpResult.errors!.items.length, 1);
       expect(signUpResult.user, isNull);
       expect(signUpResult.session, isNull);
@@ -57,7 +59,7 @@ void main() {
       await clearUser();
       var signUpResult = await signUpWithPhoneCorrect();
 
-      expect(signUpResult.errors, isNull);
+      expect(signUpResult.errors, successResponse);
       expect(signUpResult.user, isNotNull);
       // Verification not required. So session returns not null.
       expect(signUpResult.session, isNotNull);
@@ -67,7 +69,7 @@ void main() {
       await clearUser();
       var signUpResult = await signUpWithPhoneAllIncorrect();
 
-      expect(signUpResult.errors, isNotNull);
+      expect(signUpResult.errors, errorResponse);
       expect(signUpResult.errors!.items.length, 2);
       expect(signUpResult.user, isNull);
       expect(signUpResult.session, isNull);
@@ -77,7 +79,7 @@ void main() {
       await clearUser();
       var signUpResult = await signUpWithPhoneIncorrectMail();
 
-      expect(signUpResult.errors, isNotNull);
+      expect(signUpResult.errors, errorResponse);
       expect(signUpResult.errors!.items.length, 1);
       expect(signUpResult.user, isNull);
       expect(signUpResult.session, isNull);
@@ -87,7 +89,7 @@ void main() {
       await clearUser();
       var signUpResult = await signUpWithPhoneIncorrectPass();
 
-      expect(signUpResult.errors, isNotNull);
+      expect(signUpResult.errors, errorResponse);
       expect(signUpResult.errors!.items.length, 1);
       expect(signUpResult.user, isNull);
       expect(signUpResult.session, isNull);
@@ -137,6 +139,7 @@ void main() {
     await validateMail();
     var result = await signInWithEmailCorrect();
 
+    expect(result.errors, successResponse);
     expect(result.user, isNotNull);
 
     // expect saved success
@@ -219,6 +222,7 @@ void main() {
       await validateMail();
       var result = await signInWithEmailCorrect();
 
+      expect(result.errors, successResponse);
       expect(result.user, isNotNull);
       expect(result.session, isNotNull);
 
@@ -252,9 +256,9 @@ void main() {
       await setUpEmailUser(false);
 
       var result = await signInWithEmailCorrect();
+      expect(result.errors, successResponse);
       expect(result.user, isNotNull);
       expect(result.session, isNotNull);
-      expect(result.errors, isNull);
     });
 
     test('already_signed', () async {
@@ -262,22 +266,20 @@ void main() {
       await setUpEmailUser(false);
 
       var result = await signInWithEmailCorrect();
+      expect(result.errors, successResponse);
       expect(result.user, isNotNull);
       expect(result.session, isNotNull);
-      expect(result.errors, isNull);
 
       result = await signInWithEmailCorrect();
+      expect(result.errors, successResponse);
       expect(result.user, isNotNull);
       expect(result.session, isNotNull);
-      expect(result.errors, isNull);
     });
 
     test('incorrect_mail', () async {
       createClientTest();
       var result = await signInWithEmailWrongMail();
-
-      print(result.errors);
-      expect(result.errors, isNotNull);
+      expect(result.errors, errorResponse);
       expect(result.session, isNull);
       expect(result.user, isNull);
     });
@@ -286,8 +288,7 @@ void main() {
       createClientTest();
       var result = await signInWithEmailWrongPwd();
 
-      print(result.errors);
-      expect(result.errors, isNotNull);
+      expect(result.errors, errorResponse);
       expect(result.session, isNull);
       expect(result.user, isNull);
     });
@@ -299,9 +300,9 @@ void main() {
       await setUpPhoneUser(false);
 
       var result = await signInWithPhoneCorrect();
+      expect(result.errors, successResponse);
       expect(result.user, isNotNull);
       expect(result.session, isNotNull);
-      expect(result.errors, isNull);
     });
 
     test('already_signed', () async {
@@ -309,22 +310,23 @@ void main() {
       await setUpPhoneUser(false);
 
       var result = await signInWithPhoneCorrect();
+
+      expect(result.errors, successResponse);
       expect(result.user, isNotNull);
       expect(result.session, isNotNull);
-      expect(result.errors, isNull);
 
       result = await signInWithPhoneCorrect();
+
+      expect(result.errors, successResponse);
       expect(result.user, isNotNull);
       expect(result.session, isNotNull);
-      expect(result.errors, isNull);
     });
 
     test('incorrect_phone', () async {
       createClientTest();
       var result = await signInWithPhoneWrongPhone();
 
-      print(result.errors);
-      expect(result.errors, isNotNull);
+      expect(result.errors, errorResponse);
       expect(result.session, isNull);
       expect(result.user, isNull);
     });
@@ -333,8 +335,7 @@ void main() {
       createClientTest();
       var result = await signInWithPhoneWrongPwd();
 
-      print(result.errors);
-      expect(result.errors, isNotNull);
+      expect(result.errors, errorResponse);
       expect(result.session, isNull);
       expect(result.user, isNull);
     });
@@ -345,23 +346,23 @@ void main() {
       createClientTest();
       await setUpEmailUser();
       var ping = await pingSession();
-      expect(ping.errors, isNull);
+      expect(ping, successResponse);
       var result = await signOutTest();
-      expect(result, isNull);
+      expect(result, successResponse);
 
       ping = await pingSession();
-      expect(ping.errors, isNotNull);
+      expect(ping, errorResponse);
       expect(ping.errors?.status, 401);
     });
 
     test('sign_out_already_signed_out', () async {
       createClientTest();
       var result = await signOutTest();
-      expect(result, isNotNull);
+      expect(result, errorResponse);
       expect(result?.status, 401);
 
       var ping = await pingSession();
-      expect(ping.errors, isNotNull);
+      expect(ping, errorResponse);
       expect(ping.errors?.status, 401);
     });
   });
@@ -414,7 +415,7 @@ void main() {
     pings = await Future.wait([ping1Ftr, ping2Ftr]);
 
     expect(pings.where((element) => element.errors != null).length, 1);
-    expect(pings[0].errors, isNull);
-    expect(pings[1].errors, isNotNull);
+    expect(pings[0], successResponse);
+    expect(pings[1], errorResponse);
   });
 }

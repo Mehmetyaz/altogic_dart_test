@@ -29,8 +29,6 @@ Future<APIError?> empty() {
   return testBucket().empty();
 }
 
-
-
-Future<APIResponse> listFiles(){
+Future<APIResponse> listFiles() {
   return testBucket().listFiles();
 }
