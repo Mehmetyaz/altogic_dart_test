@@ -352,5 +352,16 @@ void main() {
       expect(ping.errors, isNotNull);
       expect(ping.errors?.status, 401);
     });
+
+    test('sign_out_already_signed_out', () async {
+      createClientTest();
+      var result = await signOutTest();
+      expect(result, isNotNull);
+      expect(result?.status, 401);
+
+      var ping = await pingSession();
+      expect(ping.errors, isNotNull);
+      expect(ping.errors?.status, 401);
+    });
   });
 }
