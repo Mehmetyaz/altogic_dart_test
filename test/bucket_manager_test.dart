@@ -178,4 +178,52 @@ void main() {
       expect(result.errors, isNull);
     });
   });
+
+  group('make_private', () {
+    test('exists', () async {
+      await removeTestBucket();
+      await createBucketTest(isPublic: true);
+
+      var existsRes = await bucketExists();
+
+      expect(existsRes.errors, isNull);
+      expect(existsRes.data, isNotNull);
+
+      var result = await testBucket().makePrivate();
+
+      expect(result.data, isNotNull);
+      expect(result.errors, isNull);
+
+      var info = await getBucketInfo();
+
+      expect(info.errors, isNull);
+      expect(info.data, isNotNull);
+      expect(info.data!['isPublic'], false);
+    });
+
+    test('not_exists', () async {
+      await removeTestBucket();
+
+      var existsRes = await bucketExists();
+
+      expect(existsRes.errors, isNull);
+      expect(existsRes.data, isNotNull);
+      expect(existsRes.data, false);
+
+      var result = await testBucket().makePrivate();
+
+      expect(result.data, isNull);
+      expect(result.errors, isNotNull);
+    });
+
+    test('already_private', () async {
+      await removeTestBucket();
+      await createBucketTest(isPublic: false);
+
+      var result = await testBucket().makePrivate();
+
+      expect(result.data, isNotNull);
+      expect(result.errors, isNull);
+    });
+  });
 }
