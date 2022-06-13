@@ -1,4 +1,4 @@
-import 'package:altogic_dart_test/bucket_manager/create_bucket.dart';
+import 'package:altogic_dart_test/bucket_manager/bucket.dart';
 import 'package:altogic_dart_test/bucket_manager/upload.dart';
 import 'package:altogic_dart_test/client/create_client.dart';
 import 'package:altogic_dart_test/file_manager/exists.dart';
@@ -224,6 +224,36 @@ void main() {
 
       expect(result.data, isNotNull);
       expect(result.errors, isNull);
+    });
+  });
+
+  group('list_files', () {
+    test('success', () async {
+      await removeTestBucket();
+      await createBucketTest(isPublic: true);
+
+      var uploads = await Future.wait([
+        uploadTestFile('1'),
+        uploadTestFile('2'),
+        uploadTestFile('3'),
+        uploadTestFile('4'),
+      ]);
+
+      expect(uploads.where((element) => element.errors != null), isEmpty);
+
+      var result = await listFiles();
+
+      expect(result.errors, isNull);
+      expect(result.data, isNotNull);
+      expect(result.data, isA<List>());
+
+      var data = result.data as List;
+
+      expect(data.length, 4);
+      expect(
+          data.map((e) => e['fileName']),
+          allOf(contains('hello1.txt'), contains('hello2.txt'),
+              contains('hello3.txt'), contains('hello4.txt')));
     });
   });
 }

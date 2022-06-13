@@ -28,3 +28,9 @@ Future<APIResponse<Map<String, dynamic>>> getBucketInfo() async {
 Future<APIError?> empty() {
   return testBucket().empty();
 }
+
+
+
+Future<APIResponse> listFiles(){
+  return testBucket().listFiles();
+}
