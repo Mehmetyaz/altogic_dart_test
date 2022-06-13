@@ -88,4 +88,28 @@ void main() {
     var emptyResult = await empty();
     expect(emptyResult, isNotNull);
   });
+
+  test('rename', () async {
+    await removeTestBucket();
+
+    var result =
+        await client.storage.bucket(testBucketName).rename('new_test_bucket');
+
+    expect(result.errors, isNotNull);
+    expect(result.data, isNull);
+
+    await createBucketTest();
+
+    result =
+        await client.storage.bucket(testBucketName).rename('new_test_bucket');
+
+    expect(result.errors, isNull);
+    expect(result.data, isNotNull);
+    var bucketExists = await client.storage.bucket('new_test_bucket').exists();
+
+    expect(bucketExists.errors, isNull);
+    expect(bucketExists.data, true);
+
+    await client.storage.bucket('new_test_bucket').delete();
+  });
 }
