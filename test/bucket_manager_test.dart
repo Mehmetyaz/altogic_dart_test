@@ -255,5 +255,46 @@ void main() {
           allOf(contains('hello1.txt'), contains('hello2.txt'),
               contains('hello3.txt'), contains('hello4.txt')));
     });
+
+    test('empty', () async {
+      await removeTestBucket();
+      await createBucketTest(isPublic: true);
+
+      var uploads = await Future.wait([
+        uploadTestFile('1'),
+        uploadTestFile('2'),
+        uploadTestFile('3'),
+        uploadTestFile('4'),
+      ]);
+
+      expect(uploads.where((element) => element.errors != null), isEmpty);
+
+      await empty();
+
+      var result = await listFiles();
+
+      expect(result.errors, isNull);
+      expect(result.data, isNotNull);
+      expect(result.data, isA<List>());
+
+      var data = result.data as List;
+
+      expect(data, isEmpty);
+    });
+
+    test('not_exists', () async {
+      await removeTestBucket();
+
+      var existsRes = await bucketExists();
+
+      expect(existsRes.errors, isNull);
+      expect(existsRes.data, isNotNull);
+      expect(existsRes.data, false);
+
+      var result = await testBucket().listFiles();
+
+      expect(result.data, isNull);
+      expect(result.errors, isNotNull);
+    });
   });
 }
