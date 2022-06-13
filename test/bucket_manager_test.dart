@@ -82,4 +82,10 @@ void main() {
     expect(fileExists.errors, isNull);
     expect(fileExists.data, false);
   });
+
+  test('empty_not_exists', () async {
+    await removeTestBucket();
+    var emptyResult = await empty();
+    expect(emptyResult, isNotNull);
+  });
 }
