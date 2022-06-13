@@ -1,4 +1,5 @@
 import 'package:altogic_dart_test/authorization/sign_in.dart';
+import 'package:altogic_dart_test/authorization/sign_out.dart';
 import 'package:altogic_dart_test/authorization/sign_up.dart';
 import 'package:altogic_dart_test/authorization/local_storage.dart';
 import 'package:altogic_dart_test/client/create_client.dart';
@@ -291,8 +292,6 @@ void main() {
     });
   });
 
-
-
   group('sign_in_with_phone', () {
     test('correct', () async {
       createClientTest();
@@ -339,6 +338,19 @@ void main() {
       expect(result.user, isNull);
     });
   });
-  
-  
+
+  group('sign_out', () {
+    test('sign_out', () async {
+      createClientTest();
+      await setUpEmailUser();
+      var ping = await pingSession();
+      expect(ping.errors, isNull);
+      var result = await signOutTest();
+      expect(result, isNull);
+
+      ping = await pingSession();
+      expect(ping.errors, isNotNull);
+      expect(ping.errors?.status, 401);
+    });
+  });
 }
