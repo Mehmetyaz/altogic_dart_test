@@ -167,5 +167,15 @@ void main() {
       expect(result.data, isNull);
       expect(result.errors, isNotNull);
     });
+
+    test('already_public', () async {
+      await removeTestBucket();
+      await createBucketTest(isPublic: true);
+
+      var result = await testBucket().makePublic();
+
+      expect(result.data, isNotNull);
+      expect(result.errors, isNull);
+    });
   });
 }
