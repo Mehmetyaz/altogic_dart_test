@@ -214,10 +214,10 @@ void main() {
       await createBucketTest(isPublic: true);
 
       var uploads = await Future.wait([
-        uploadTestFile('1'),
-        uploadTestFile('2'),
-        uploadTestFile('3'),
-        uploadTestFile('4'),
+        uploadTestFile(suffix: '1'),
+        uploadTestFile(suffix: '2'),
+        uploadTestFile(suffix: '3'),
+        uploadTestFile(suffix: '4'),
       ]);
 
       expect(uploads.where((element) => element.errors != null), isEmpty);
@@ -241,10 +241,10 @@ void main() {
       await createBucketTest(isPublic: true);
 
       var uploads = await Future.wait([
-        uploadTestFile('1'),
-        uploadTestFile('2'),
-        uploadTestFile('3'),
-        uploadTestFile('4'),
+        uploadTestFile(suffix: '1'),
+        uploadTestFile(suffix: '2'),
+        uploadTestFile(suffix: '3'),
+        uploadTestFile(suffix: '4'),
       ]);
 
       expect(uploads.where((element) => element.errors != null), isEmpty);
@@ -275,7 +275,6 @@ void main() {
     });
   });
 
-
   group('upload', () {
     test('short_file', () async {
       await removeTestBucket();
@@ -301,6 +300,13 @@ void main() {
       });
       expect(result, successResponse);
       expect(i > 10, true);
+    });
+
+    test('wrong_bucket', () async {
+      await removeTestBucket();
+      await createBucketTest();
+      var result = await uploadTestFile(wrong: true);
+      expect(result, errorResponse);
     });
   });
 }
