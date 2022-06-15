@@ -310,7 +310,6 @@ void main() {
     });
   });
 
-
   group('delete_files', () {
     test('success', () async {
       await removeTestBucket();
@@ -332,7 +331,6 @@ void main() {
 
       expect(deleteResult, successResponse);
 
-
       var result = await listFiles();
 
       expect(result, successResponse);
@@ -341,6 +339,83 @@ void main() {
       var data = result.data as List;
 
       expect(data, isEmpty);
+    });
+
+    test('some exists some not', () async {
+      await removeTestBucket();
+      await createBucketTest(isPublic: true);
+
+      var uploads = await Future.wait([
+        uploadTestFile(suffix: '1'),
+        uploadTestFile(suffix: '2'),
+        uploadTestFile(suffix: '3'),
+        uploadTestFile(suffix: '4'),
+      ]);
+
+      expect(uploads.where((element) => element.errors != null), isEmpty);
+
+      var names = [
+        ...List.generate(
+            2, (index) => fileName + ((index + 1).toString()) + fileExt),
+        ...List.generate(
+            2, (index) => fileName + ((index + 30).toString()) + fileExt)
+      ];
+
+      var deleteResult = await deleteFiles(names.toList());
+
+      expect(deleteResult, successResponse);
+
+      var result = await listFiles();
+
+      expect(result, successResponse);
+      expect(result.data, isA<List>());
+
+      var data = result.data as List;
+
+      expect(data.length, 2);
+    });
+
+    test('all not exists', () async {
+      await removeTestBucket();
+      await createBucketTest(isPublic: true);
+
+      var uploads = await Future.wait([
+        uploadTestFile(suffix: '1'),
+        uploadTestFile(suffix: '2'),
+        uploadTestFile(suffix: '3'),
+        uploadTestFile(suffix: '4'),
+      ]);
+
+      expect(uploads.where((element) => element.errors != null), isEmpty);
+
+      var names = List.generate(
+          4, (index) => fileName + ((index + 30).toString()) + fileExt);
+
+      var deleteResult = await deleteFiles(names.toList());
+
+      expect(deleteResult, successResponse);
+
+      var result = await listFiles();
+
+      expect(result, successResponse);
+      expect(result.data, isA<List>());
+
+      var data = result.data as List;
+
+      expect(data.length, 4);
+    });
+
+    test('bucket not exists', () async {
+      await removeTestBucket();
+      await createBucketTest(isPublic: true);
+
+      await uploadTestFile();
+
+      await removeTestBucket();
+
+      var deleteResult = await deleteFiles([fullFileName]);
+
+      expect(deleteResult, errorResponse);
     });
   });
 }
