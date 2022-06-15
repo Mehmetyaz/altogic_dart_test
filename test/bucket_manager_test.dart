@@ -418,4 +418,41 @@ void main() {
       expect(deleteResult, errorResponse);
     });
   });
+
+  group('tags', () {
+    test('success', () async {
+      await removeTestBucket();
+      await createBucketTest();
+
+      var addRes = await testBucket().addTags(['tag1', 'tag2']);
+
+      expect(addRes, successResponse);
+
+      var bucketInfo = await testBucket().getInfo();
+
+      expect(bucketInfo, successResponse);
+
+      expect(
+          bucketInfo.data!['tags'], allOf(contains('tag1'), contains('tag2')));
+
+      var removeRes = await testBucket().removeTags(['tag1', 'tag2']);
+
+      expect(removeRes, successResponse);
+
+      bucketInfo = await testBucket().getInfo();
+
+      expect(bucketInfo, successResponse);
+
+      expect(bucketInfo.data!['tags'], isEmpty);
+    });
+
+    test('not exists', () async {
+      var addRes = await client.storage.bucket('nameOrId').addTags(['tag']);
+      var removeRes =
+          await client.storage.bucket('nameOrId').removeTags(['tag']);
+
+      expect(addRes, errorResponse);
+      expect(removeRes, errorResponse);
+    });
+  });
 }
