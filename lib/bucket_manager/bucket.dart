@@ -29,6 +29,10 @@ Future<APIError?> empty() {
   return testBucket().empty();
 }
 
+Future<APIError?> deleteFiles(List<String> fileNamesOrIds) {
+  return testBucket().deleteFiles(fileNamesOrIds);
+}
+
 Future<APIResponse> listFiles() {
   return testBucket().listFiles();
 }
