@@ -11,13 +11,27 @@ const fileExt = '.txt';
 const fullFileName = fileName + fileExt;
 
 var fileContentString = 'altogic' * 100; // 700b
-var longFileContentString = 'altogic' * 10000; // ~70kb
+var midFileContentString = 'altogic' * 10000; // ~70kb
 var veryLongFileContentString = 'altogic' * 750000; // ~5mb
 
-var fileContent = utf8.encode(longFileContentString) as Uint8List;
+var fileContent = utf8.encode(midFileContentString) as Uint8List;
 
 Future<APIResponse<Map<String, dynamic>>> uploadTestFile([String? suffix]) {
   return client.storage
       .bucket(testBucketName)
       .upload(fileName + (suffix ?? '') + fileExt, fileContent);
+}
+
+Future<APIResponse<Map<String, dynamic>>> uploadMidTestFile([String? suffix]) {
+  return client.storage.bucket(testBucketName).upload(
+      '${fileName}_mid_${suffix ?? ''}$fileExt',
+      utf8.encode(midFileContentString) as Uint8List);
+}
+
+Future<APIResponse<Map<String, dynamic>>> uploadLongTestFile(
+    {OnUploadProgress? onUploadProgress, String? suffix}) {
+  return client.storage.bucket(testBucketName).upload(
+      '${fileName}_long_${suffix ?? ''}$fileExt',
+      utf8.encode(veryLongFileContentString) as Uint8List,
+      FileUploadOptions(onProgress: onUploadProgress));
 }

@@ -9,6 +9,13 @@ const clientKey = "abb823877b764da9a2a21c7318cd9d23";
 const apiKey =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbnZJZCI6IjYyYTMwNDkxZjNhOWVmY2M1ZWI3MTE5MyIsImtleUlkIjoiNjJhMzA0OTJmM2E5ZWZjYzVlYjcxMTk5IiwiaWF0IjoxNjU0ODUwNzA2LCJleHAiOjI1MTg4NTA3MDZ9.vUtaI_ZjsqOLKBIbsxCijWNXrJxkuZhFjTIlFv8TMLo';
 
+const successPing = {'hello': 'world!'};
+
+const email = 'mehmedyaz@gmail.com';
+const phone = '+905530635063';
+const pwd = 'mehmetyaz';
+
+
 Future<APIResponse<Map<String, dynamic>>> ping(
     [AltogicClient? clientInstance]) async {
   return (clientInstance ?? client).endpoint.get('/ping').asMap();
@@ -24,11 +31,6 @@ Future<APIResponse<Map<String, dynamic>>> pingSession(
   return (clientInstance ?? client).endpoint.get('/ping_session').asMap();
 }
 
-const successPing = {'hello': 'world!'};
-
-const email = 'mehmedyaz@gmail.com';
-const phone = '+905530635063';
-const pwd = 'mehmetyaz';
 
 Future<APIResponse> clearUser([AltogicClient? clientInstance]) {
   return (clientInstance ?? client)

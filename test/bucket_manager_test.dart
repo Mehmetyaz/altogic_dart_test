@@ -6,7 +6,7 @@ import 'package:altogic_dart_test/utils.dart';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 
-import 'utils.dart';
+import 'matcher.dart';
 
 void main() {
   setUp(() async {
@@ -275,12 +275,32 @@ void main() {
     });
   });
 
+
   group('upload', () {
     test('short_file', () async {
       await removeTestBucket();
       await createBucketTest();
       var result = await uploadTestFile();
       expect(result, successResponse);
+    });
+
+    test('medium_file', () async {
+      await removeTestBucket();
+      await createBucketTest();
+      var result = await uploadMidTestFile();
+      expect(result, successResponse);
+    });
+
+    test('long_file - on progress check', () async {
+      await removeTestBucket();
+      await createBucketTest();
+      var i = 0;
+      var result = await uploadLongTestFile(
+          onUploadProgress: (total, uploaded, percentComplete) {
+        i++;
+      });
+      expect(result, successResponse);
+      expect(i > 10, true);
     });
   });
 }
