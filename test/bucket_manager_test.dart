@@ -493,6 +493,24 @@ void main() {
 
         expect(info.data!['isPublic'], true);
       });
+
+      test('tags', () async {
+        await removeTestBucket();
+        await createBucketTest();
+        var bucket = testBucket();
+        var res = await bucket.updateInfo(
+            newName: testBucketName, isPublic: false, tags: ['tag1', 'tag2']);
+
+        expect(res, successResponse);
+
+        var info = await bucket.getInfo();
+
+        expect(info, successResponse);
+
+        expect(info.data!['isPublic'], false);
+        expect(info.data!['tags'], isA<List>());
+        expect(info.data!['tags'], allOf(contains('tag1'), contains('tag2')));
+      });
     });
   });
 }
