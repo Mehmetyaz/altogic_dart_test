@@ -476,6 +476,23 @@ void main() {
             .bucket('newName')
             .updateInfo(newName: testBucketName, isPublic: true);
       });
+
+      test('public', () async {
+        await removeTestBucket();
+        // default public is false.
+        await createBucketTest();
+        var bucket = testBucket();
+        var res =
+            await bucket.updateInfo(newName: testBucketName, isPublic: true);
+
+        expect(res, successResponse);
+
+        var info = await bucket.getInfo();
+
+        expect(info, successResponse);
+
+        expect(info.data!['isPublic'], true);
+      });
     });
   });
 }
