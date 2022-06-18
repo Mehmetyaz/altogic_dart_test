@@ -454,5 +454,28 @@ void main() {
       expect(addRes, errorResponse);
       expect(removeRes, errorResponse);
     });
+
+    group('update_info', () {
+      test('name', () async {
+        await client.storage
+            .bucket('newName')
+            .updateInfo(newName: testBucketName, isPublic: true);
+
+        var bucket = testBucket();
+        var res = await bucket.updateInfo(newName: 'newName', isPublic: true);
+
+        expect(res, successResponse);
+
+        var exists = await client.storage.bucket('newName').exists();
+
+        expect(exists, successResponse);
+
+        expect(exists.data, true);
+
+        await client.storage
+            .bucket('newName')
+            .updateInfo(newName: testBucketName, isPublic: true);
+      });
+    });
   });
 }
