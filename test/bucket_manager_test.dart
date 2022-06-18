@@ -511,6 +511,21 @@ void main() {
         expect(info.data!['tags'], isA<List>());
         expect(info.data!['tags'], allOf(contains('tag1'), contains('tag2')));
       });
+
+      test('not exists', () async {
+        await removeTestBucket();
+        var bucket = testBucket();
+        var res = await bucket.updateInfo(
+            newName: testBucketName, isPublic: false, tags: ['tag1', 'tag2']);
+
+        expect(res, errorResponse);
+
+        var exists = await bucket.exists();
+
+        expect(exists, successResponse);
+
+        expect(exists.data, false);
+      });
     });
   });
 }
