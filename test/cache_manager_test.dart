@@ -153,19 +153,43 @@ void main() {
       });
     });
 
-    group('expire', () {
-      test('success', () async {
-        var setResult = await client.cache.set('expire', 'hello', ttl: 3);
+    test('expire_success', () async {
+      var setResult = await client.cache.set('expire', 'hello', ttl: 3);
 
-        expect(setResult, successResponse);
+      expect(setResult, successResponse);
 
-        await Future.delayed(Duration(seconds: 5));
+      await Future.delayed(Duration(seconds: 5));
 
-        var value = await client.cache.get('expire').asDynamic();
+      var value = await client.cache.get('expire').asDynamic();
 
-        expect(value.data, isNull);
-        expect(value.errors, isNull);
-      });
+      expect(value.data, isNull);
+      expect(value.errors, isNull);
+    });
+
+    test('stats', () async {
+      await addTestCache(10);
+
+      var stats = await client.cache.getStats();
+
+      expect(stats, successResponse);
+    });
+
+    test(skip:true,'list_keys', () async {
+      await addTestCache(10);
+
+      var list = await client.cache.listKeys(null, null);
+
+      var cached = await getTestCache().asInt();
+
+      print(cached.data);
+
+      print(list.data);
+
+      print(list.next);
+      print(list.errors);
+
+      expect(list, successResponse);
+      expect(list.data, isNotEmpty);
     });
   });
 }
