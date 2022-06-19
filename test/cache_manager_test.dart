@@ -70,5 +70,35 @@ void main() {
       expect(cache.errors, isNull);
       expect(cache.data, isNull);
     });
+
+    test('delete', () async {
+      var result = await addTestCache('hello');
+
+      expect(result, successResponse);
+
+      var cache = await client.cache.delete(testCacheKey);
+      expect(cache, successResponse);
+
+      var value = await getTestCache().asDynamic();
+
+      expect(value.data, isNull);
+      expect(value.errors, isNull);
+    });
+
+    test('delete_not_exists_key', () async {
+      var result = await addTestCache('hello');
+
+      expect(result, successResponse);
+
+      await client.cache.delete(testCacheKey);
+
+      var cache = await client.cache.delete(testCacheKey);
+      expect(cache, successResponse);
+
+      var value = await getTestCache().asDynamic();
+
+      expect(value.data, isNull);
+      expect(value.errors, isNull);
+    });
   });
 }
