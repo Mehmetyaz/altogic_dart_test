@@ -140,7 +140,6 @@ void main() {
         expect(cache.data, 1);
       });
 
-
       test('not_exists_dec', () async {
         await client.cache.delete('not_exists_dec');
         var increment = await client.cache.decrement('not_exists_dec', 1);
@@ -152,7 +151,21 @@ void main() {
         expect(cache, successResponse);
         expect(cache.data, -1);
       });
+    });
 
+    group('expire', () {
+      test('success', () async {
+        var setResult = await client.cache.set('expire', 'hello', ttl: 3);
+
+        expect(setResult, successResponse);
+
+        await Future.delayed(Duration(seconds: 5));
+
+        var value = await client.cache.get('expire').asDynamic();
+
+        expect(value.data, isNull);
+        expect(value.errors, isNull);
+      });
     });
   });
 }
