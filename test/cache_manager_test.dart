@@ -24,7 +24,6 @@ void main() {
       expect(cache.data, 10);
     });
 
-
     test('set_overwrite', () async {
       var result = await addTestCache(20);
 
@@ -47,6 +46,29 @@ void main() {
       expect(cache, successResponse);
 
       expect(cache.data, 'hello');
+    });
+
+    test('get_success', () async {
+      var result = await addTestCache('hello');
+
+      expect(result, successResponse);
+
+      var cache = await getTestCache().asString();
+
+      expect(cache, successResponse);
+
+      expect(cache.data, 'hello');
+    });
+
+    test('get_not_exists', () async {
+      var result = await addTestCache('hello');
+
+      expect(result, successResponse);
+
+      var cache = await client.cache.get('not_exists').asString();
+
+      expect(cache.errors, isNull);
+      expect(cache.data, isNull);
     });
   });
 }
